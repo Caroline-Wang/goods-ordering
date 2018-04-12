@@ -6,15 +6,15 @@
 
     <main>
       <ul class="all-menus" v-if="this.$store.state.menus.length">
-        <li v-for="(item, index) in this.$store.state.menus" :key="item.id">
-          <img src="../../assets/img/menu_dinner.jpg" alt="">
+        <li v-for="(item, index) in this.$store.state.menus" :key="item.code" @click="chooseMenu(item.code)">
+          <img :src="item.picturePath" alt="">
           <p class="title">{{item.name}}</p>
         </li>
       </ul>
-      <div class="switch-language">
-        <button @click="chooseLanage('chinese')">中文版</button>
-        <button @click="chooseLanage('english')">English</button>
-      </div>
+      <!--<div class="switch-language">-->
+        <!--<button @click="chooseLanage('chinese')">中文版</button>-->
+        <!--<button @click="chooseLanage('english')">English</button>-->
+      <!--</div>-->
     </main>
 
     <footer>
@@ -29,11 +29,20 @@
     data() {
       return {}
     },
+    beforeCreate(){
+      //获取菜谱种类
+      this.$store.dispatch('setMenus')
+    },
     methods: {
       chooseLanage(value){
         console.log(value)
         this.$store.commit('switchLanguage',value)
         this.$router.push('foodlist')
+      },
+      chooseMenu(menuId){
+          console.log(menuId)
+          this.$store.commit('switchMenus',menuId)
+          this.$router.push('foodlist')
       }
     }
   }
@@ -76,13 +85,14 @@
     flex: 1;
     padding: 0 10%;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
+    flex-wrap: wrap;
     overflow-y: auto;
 
   >
   li {
-    width: 25%;
+    width: 30%;
     text-align: center;
 
   img {
